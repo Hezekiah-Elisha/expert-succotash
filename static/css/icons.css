@@ -1,0 +1,83 @@
+@font-face {
+	font-family: 'Linearicons-Free';
+	src:url('../../static/css/fonts/Linearicons-Free.eot?w118d');
+	src:url('../../static/css/fonts/Linearicons-Free.eot?#iefixw118d') format('embedded-opentype'),
+		url('../../static/css/fonts/Linearicons-Free.woff2?w118d') format('woff2'),
+		url('../../static/css/fonts/Linearicons-Free.woff?w118d') format('woff'),
+		url('../../static/css/fonts/Linearicons-Free.ttf?w118d') format('truetype'),
+		url('../../static/css/fonts/Linearicons-Free.svg?w118d#Linearicons-Free') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.lnr {
+	font-family: 'Linearicons-Free';
+	speak-as: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.lnr-tag:before {
+	content: "\e82f";
+}
+.lnr-carlendar-full:before{
+	content: "\e836";
+}
+.lnr-pencil:before{
+	content: "\e802";
+}
+.lnr-home:before{
+	content: "\e800";
+	font-weight: bold;
+}
+.lnr-list:before{
+	content: "\e872";
+	font-weight: bold;
+}
+.lnr-eye:before{
+	content: "\e81b";
+}
+.lnr-enter:before{
+	content: "\e81f";
+	font-weight: bold;
+}
+.lnr-apartment:before{
+	content:"\e801";
+	font-weight: bold;
+}
+.lnr-user:before{
+	content:"\e82a";
+	font-weight: bold;
+}
+.lnr-exit:before{
+	content:"\e820";
+	font-weight: bold;
+}
+.lnr-file-add:before{
+	content:"\e81e";
+	font-weight: bold;
+}
+.lnr-printer:before{
+	content:"\e81c";
+	font-weight: bold;
+	padding: 2px;
+}
+.lnr-users:before{
+	content:"\e82b";
+	font-weight: bold;
+}
+.lnr-layers:before{
+	content:"\e88e";
+	font-weight: bold;
+}
+.lnr-leaf:before{
+	content:"\e849";
+	font-weight: bold;
+}

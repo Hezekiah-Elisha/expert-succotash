@@ -1,0 +1,100 @@
+{% extends "structure.html" %}
+{% block banner %}
+  <div class="back">
+    <p>The Tech Archlight...</p>
+  </div>
+{% endblock banner %}
+
+{% block header %}
+  {{ super() }}
+{% endblock header%}
+
+{% block slide %}
+  <section class="myc">
+    {% for post in posts %}
+    {% if post.approved == True %}
+    <div class="myc1">
+      <img src="static/images/{{post.banner}}" class="img-fluid" alt="">
+      <p>{{post.body[:20] | safe}}</p>
+      <a href="/post/{{ post.slug }}" class="btn btn-info">Read More</a>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </section>
+{% endblock slide %}
+
+{% block main_container %}
+<main class="container">
+  <div class="row">
+    <div class="col-lg-8">
+      {% for post in posts %}
+      {% if post.approved == True %}
+      <div class="card blog-highlight">
+        <div class="blog-image">
+          <img src="../static/images/{{ post.banner }}" class="img-fluid" alt="">
+        </div>
+        <div class="blog-text">
+          <p>{{ post.body[:300] | safe}}...</p>
+          <a href="/post/{{ post.slug }}" class="btn btn-info">Read More</a>
+        </div>
+      </div>
+      {# else #}
+      <!-- <p>Comming soon</p> -->
+      {% endif %}
+      {% endfor %}
+ 
+        <!-- <div class="card blog-highlight">
+          <div class="blog-image">
+            <img src="../static/images/1.png" class="img-fluid" alt="">
+          </div>
+          <div class="blog-text">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <button type="button" class="btn btn-info" name="button">Read More</button>
+          </div>
+        </div> -->
+        <!-- <div class="card blog-highlight">
+          <div class="blog-image">
+            <img src="../static/images/1.png" class="img-fluid" alt="">
+          </div>
+          <div class="blog-text">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <button type="button" class="btn btn-info" name="button">Read More</button>
+          </div>
+        </div> -->
+
+
+    </div>
+    <div class="col-lg-4">
+      <form class="card d-flex topics">
+        <h4>Search for content sing keywords</h4>
+        <input class="form-control me-2 search" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+      <!-- <a class="twitter-timeline" href="https://twitter.com/_hezekiahelisha?ref_src=twsrc%5Etfw">Tweets by _hezekiahelisha</a> -->
+      <!-- <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
+    </div>
+  </div>
+</main>
+{% endblock main_container %}
+
+{% block main %}
+    {{ super() }}
+{% endblock main %}
+
+{% block footer %}
+<footer>
+  <div class="">
+    Join us: <a href="https://facebook.com">Facebook</a>, twitter
+  </div>
+  <div class="">
+    <span>&copy;</span> The The Tech Archlight {{ year }}
+  </div>
+</footer>
+{% endblock footer %}

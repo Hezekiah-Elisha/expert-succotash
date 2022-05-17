@@ -1,0 +1,23 @@
+{% extends "structure.html" %}
+
+{% block main_container %}
+<main class="login-main">
+    <section>
+      <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
+    </section>
+    <article class="">
+      <form class="" action="/login" method="post">
+        <label for=""><h3>Log In</h3></label>
+        <input type="text" name="username" value="" placeholder="username">
+        <input type="password" name="password" value="" placeholder="password">
+        <button type="submit" class="btn" name="button">Log in</button>
+        {{ message }}
+      </form>
+      <p>Don't have an account? <a href="/register">Register here</a></p>
+    </article>
+  </main>
+{% endblock main_container %}
+
+{% block main %}
+    {{ super() }}
+{% endblock main %}

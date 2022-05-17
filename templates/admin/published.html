@@ -1,0 +1,50 @@
+{% extends "admin/admin_structure.html" %}
+
+{% block dash_side %}    
+    <div class="dash-side">
+        <a href="createpost.html"><span class="lnr lnr-file-add"></span>Create post</a>
+        <a href="registered.html"><span class="lnr lnr-users"></span>View Users</a>
+        <a href="publishedposts.html"><span class="lnr lnr-printer"></span>Published Posts</a>
+        <a href="manageposts.html"><span class="lnr lnr-layers"></span>Manage Posts</a>
+    </div>
+{% endblock dash_side %}
+
+{% block dash_main %}
+
+<main class="dash-other">
+    {{ super() }}
+    <article class="dash-main">
+      <h3 class="dash-welcome">Published Posts</h3>
+      <div class="">
+        <table class="table table-hover table-striped table-responsive">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <!-- <th>Body snippet</th> -->
+            <th>Owner</th>
+            <th>Day Posted</th>
+            <th>Views</th>
+            <th>topic</th>
+            <th>Visit</th>
+          </tr>
+          {% for post in posts %}
+          {% if post.approved %}
+          
+          <tr>
+            <td>{{ post.post_id }}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.user_id}}</td>
+            <td>{{post.dop}}</td>
+            <td>{{post.views}}</td>
+            <td>{{post.topic}}</button></td>
+            <td><a href="/post/{{ post.slug }}" class="func btn btn-outline-info">Visit</a></td>
+          </tr>
+          
+          {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+    </article>
+  </main>
+
+{% endblock dash_main %}

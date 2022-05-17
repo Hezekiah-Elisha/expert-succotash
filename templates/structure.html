@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="static/slick/slick.css" media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="static/slick/slick-theme.css" media="screen, projection"/>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/icons.css">
+    <meta name="theme-color" content="#058EAB">
+    <title>Welcome || The Tech Archlight</title>
+</head>
+<body>
+    {% block banner %}
+    {% endblock banner %}
+    
+    {% block header %}
+     <header class="">
+        <nav class="position-relative navbar navbar-expand-lg navbar-dark nav-sticky">
+          <div class="container-fluid position-sticky top-0 start-0">
+            <a class="navbar-brand" href="#"><span id="brandc">The Tech Archlight</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/"><span class="lnr lnr-home"></span>Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/post"><span class="lnr lnr-list"></span>Posts</a>
+                </li>
+                <!-- <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dropdown
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link">Contact us</a>
+                </li>
+              </ul>
+              <div class="">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if 'username' in session %}
+                    <li class="nav-item">
+                      <a class="nav-link">Hello {{ g.username }}!</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/dashboard"><span class="lnr lnr-apartment"></span>Dashbord</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/logout"><span class="lnr lnr-apartment"></span>logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="/login"><span class="lnr lnr-enter"></span>Log in</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/register"><span class="lnr lnr-pencil"></span>Sign Up</a>
+                    </li>
+                    {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>    
+    {% endblock header %}
+
+    {% block main %}
+      {% block slide %}{% endblock slide %}
+      {% block main_container %}{% endblock main_container %}
+    {% endblock main %}
+
+    {% block footer %}
+
+    {% endblock footer %}
+
+    <script src="../static/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../static/js/jquery.min.js" charset="utf-8"></script>
+    <script src="../static/slick/slick.min.js" charset="utf-8"></script>
+    <script src="../static/js/script.js" charset="utf-8"></script>
+</body>
+</html>

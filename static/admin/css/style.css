@@ -1,0 +1,123 @@
+:root{
+  --color1: rgba(5, 142, 171, 0.9);
+  --scrollbarBG: #CFD8DC;
+  --thumbBG: #ffA4AE;
+  --background: #058EAB;
+  --lightAccent: #528D86;
+  --dark-accent: #3c6270;
+  --brand-color: #3B5756;
+  --text-color: #191419;
+}
+
+/* @font-face{
+  font-family: georgia;
+  src: url(.../fonts/Georgia.ttf);
+}
+
+@font-face {
+  font-family: MediumSans;
+  src: url(./fonts/Medium_500.ttf);
+}
+
+@font-face {
+  font-family: Amsterdam_Four;
+  src: url(../fonts/Amsterdam_400.ttf);
+} */
+
+*{
+  box-sizing: border-box;
+  font-family: MediumSans;
+  scroll-behavior: smooth;
+}
+
+.dash-main{
+  display: flex;
+  flex-direction: column;
+}
+.dash-main  .dash-welcome{
+  font-family: Amsterdam_Four;
+  text-align: center;
+  color: white;
+}
+.dash-tabs{
+  display: flex;
+  justify-content: space-around;
+    flex-wrap: wrap;
+}
+.dash-tabs a{
+  padding: 20px;
+  background-color: var(--lightAccent);
+  text-decoration: none;
+  text-transform: capitalize;
+}
+.dash-tabs a h4{
+    color: var(--text-color);
+}
+.dash-side{
+  flex: 1;
+  background-color: var(--brand-color);
+  display: flex;
+  flex-direction: column;
+  /* height: 8h; */
+}
+.dash-side a{
+  color: var(--tect-color) !important;
+  text-decoration: none;
+  text-align: left;
+  padding: 20px;
+  background-color: var(--lightAccent);
+}
+.dash-side a:hover{
+  background-color: var(--dark-accent);
+  transition: 0.4s;
+  /* backdrop-filter: blur(10px); */
+}
+.dash-other .dash-main{
+  flex: 3;
+  padding: 10px;
+}
+.func{
+  color: white !important;
+  padding: 5px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.func:hover{
+  opacity: 0.8;
+}
+.modal{
+  z-index: 999999;
+}
+.modal-content{
+  background: var(--background);
+}
+.modal-content input{
+  backdrop-filter: blur(10px);
+  background-color: var(--brand-color);
+}
+
+.create-post{
+  padding: 30px;
+}
+.create-post input{
+    backdrop-filter: blur(10px);
+    padding: 4px;
+    margin: 10px;
+    background-color: rgba(30,30,0,0.1);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 5px;
+}
+.note-editable {
+  background-color: white !important;
+}
+.create-post button{
+  color: var(--text-color) !important;
+  margin: 20px;
+}
+@media (max-width: 767.9px) {
+  #brandc{
+    font-size: 17.5px;
+  }
+}

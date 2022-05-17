@@ -1,0 +1,43 @@
+{% extends "admin/admin_structure.html" %}
+
+{% block dash_side %}    
+    <div class="dash-side">
+        <a href="createpost.html"><span class="lnr lnr-file-add"></span>Create post</a>
+        <a href="registered.html"><span class="lnr lnr-users"></span>View Users</a>
+        <a href="publishedposts.html"><span class="lnr lnr-printer"></span>Published Posts</a>
+        <a href="manageposts.html"><span class="lnr lnr-layers"></span>Manage Posts</a>
+    </div>
+{% endblock dash_side %}
+
+{% block dash_main %}
+<main class="dash-other">
+    {{ super() }}
+    <article class="dash-main">
+      {{ message }}
+      <h3 class="dash-welcome">Post an article</h3>
+      <form class="create-post" action="/create_post" method="POST" enctype="multipart/form-data">
+        {# post #}
+        <label for="title">Title</label>
+        <input type="text" name="title" value="">
+
+        <label for="banner">Banner</label>
+        <input type="file" name="file" value="" accept="image/jpg, image/jpeg, image/png">
+        
+        <label for="body">Body</label>
+        <textarea name="body" id="editor" rows="30" cols="80"></textarea>
+        
+        <label for="topic">Topic</label>
+        <input type="text" name="topic" value="">
+        <div id="sec-btn">
+          <button type="submit" class="btn btn-outline-success" name="button">Submit</button>
+        </div>
+        {# endif #}
+      </form>
+    </article>
+  </main>
+
+{% endblock dash_main %}
+{% block editor %}
+  <script src="../../static/admin/summernote/summernote-lite.min.js"></script>
+  <script src="../../static/js/script.js"></script>
+{% endblock editor %}

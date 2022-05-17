@@ -1,0 +1,65 @@
+{% extends "structure.html" %}
+
+{% block main_container %}
+<main>
+    <article class="container post">
+      <section>
+        <img class="img-fluid" src="../static/images/{{ banner }}" title="banner" alt="banner">
+      </section>
+      <div class="">
+        <h1 class="post_title">{{ title }}</h1>
+        <div class="post_info">
+          <div class="">
+            <span class="lnr lnr-tag"></span> {{ name }}
+          </div>
+          <div class="">
+            <span class="lnr lnr-carlendar-full"></span> {{ dop }}
+          </div>
+          <div class="">
+            <span class="lnr lnr-pencil"></span> comments
+          </div>
+          <div class="">
+            <span class="lnr lnr-eye"></span>{{ views }} Views
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        {{ body | safe }}
+      </div>
+    </article>
+    <aside class="">
+      <div class="card" style="width: 25rem;">
+        <div class="card-body">
+          <img class="img-fluid" src="../static/images/5.jpg" title="banner" alt="banner">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+      <div class="card topics">
+        <h3>Topics</h3>
+        <ul class="striped-list">
+          <li>Topic 1</li>
+          <li>Topic 2</li>
+          <li>Topic 3</li>
+          <li>Topic 4</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+{% endblock main_container %}
+
+{% block main %}
+    {{ super() }}
+{% endblock main %}
+
+{% block footer %}
+<footer>
+  <div class="">
+    Join us: <a href="https://facebook.com">Facebook</a>, twitter
+  </div>
+  <div class="">
+    <span>&copy;</span> The The Tech Archlight
+  </div>
+</footer>
+{% endblock footer %}

@@ -1,0 +1,20 @@
+{% extends "admin/admin_structure.html" %}
+{% block dash_side %}    
+    <div class="dash-side">
+        <a href="createpost.html"><span class="lnr lnr-file-add"></span>Create post</a>
+        <a href="registered.html"><span class="lnr lnr-users"></span>View Users</a>
+        <a href="publishedposts.html"><span class="lnr lnr-printer"></span>Published Posts</a>
+        <a href="manageposts.html"><span class="lnr lnr-layers"></span>Manage Posts</a>
+    </div>
+{% endblock dash_side %}
+{% block dash_main %}
+<main class="dash-main">
+    <h3 class="dash-welcome">Welcome to the Dashboard</h3>
+    {{ message }}
+    <article class="dash-tabs">
+      <a href="/registered" class="card"><h4>Registered users</h4></a>
+      <a href="/manage_posts" class="card"><h4>Manage posts</h4></a>
+      <a href="/published" class="card"><h4>Published</h4></a>
+    </article>
+  </main>
+{% endblock dash_main %}

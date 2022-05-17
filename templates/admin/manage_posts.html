@@ -1,0 +1,86 @@
+{% extends "admin/admin_structure.html" %}
+
+{% block dash_side %}    
+    <div class="dash-side">
+        <a href="createpost.html"><span class="lnr lnr-file-add"></span>Create post</a>
+        <a href="registered.html"><span class="lnr lnr-users"></span>View Users</a>
+        <a href="publishedposts.html"><span class="lnr lnr-printer"></span>Published Posts</a>
+        <a href="manageposts.html"><span class="lnr lnr-layers"></span>Manage Posts</a>
+    </div>
+{% endblock dash_side %}
+
+{% block dash_main %}
+<main class="dash-other">
+    {{ super() }}
+    <article class="dash-main">
+      <div class="">
+        <h3 class="dash-welcome">Unpublished</h3>
+        <table class="table table-hover table-striped table-responsive">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Owner</th>
+            <th>Day Posted</th>
+            <th>Views</th>
+            <th>Published?</th>
+            {% if g.role == 'super_user' or g.role == 'Admin' %}
+            <th>Publish</th>
+            {% endif %}
+            <th>Edit</th>
+            <th>delete</th>
+          </tr>
+          {% for post in posts %}
+          {% if post.approved == False %}
+          <tr>
+            <td>{{post.post_id}}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.user_id}}</td>
+            <td>{{post.dop}}</td>
+            <td>{{post.views}}</td>
+            <td>{{post.approved}}</td>
+            {% if g.role == 'super_user' or g.role == 'Admin' %}
+            <td><a href="{{ url_for('approved_post', id=post.post_id) }}" class="func btn btn-success">Publish</button></td>
+            {% endif %}
+            <td><a href="{{ url_for('deleted_post', id=post.post_id) }}" name="button" class="func btn btn-danger">Delete</button></td>
+            <td><a href="/edit_post/{{ post.post_id }}" class="func btn btn-outline-dark">Edit</a></td>    
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </table>
+        <br>
+        <div class="">
+          <h3 class="dash-welcome">Published</h3>
+          <table class="table table-hover table-striped table-responsive">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Owner</th>
+              <th>Day Posted</th>
+              <th>Views</th>
+              <th>Published?</th>
+              <th>UnPublish</th>
+            </tr>
+            {% for post in posts %}
+            {% if post.approved == True %}
+            <tr>
+              <td>{{post.post_id}}</td>
+              <td>{{post.title}}</td>
+              <td>{{post.user_id}}</td>
+              <td>{{post.dop}}</td>
+              <td>{{post.views}}</td>
+              <td>{{post.approved}}</td>
+              {# if g.role == 'super_user' or g.role == 'Admin' #}
+              <td><a href="{{ url_for('unapproved_post', id=post.post_id) }}" name="button" class="func btn btn-danger">Unpublish</button></td>
+                {# endif #}
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </table>
+      </div>
+    </article>
+  </main>
+{% endblock dash_main %}
+{% block editor %}
+  <script src="../../static/admin/js/ckeditor.js"></script>
+  <script src="../../static/js/script.js"></script>
+{% endblock editor %}
