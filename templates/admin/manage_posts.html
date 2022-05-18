@@ -42,7 +42,9 @@
             <td><a href="{{ url_for('approved_post', id=post.post_id) }}" class="func btn btn-success">Publish</button></td>
             {% endif %}
             <td><a href="{{ url_for('deleted_post', id=post.post_id) }}" name="button" class="func btn btn-danger">Delete</button></td>
-            <td><a href="/edit_post/{{ post.post_id }}" class="func btn btn-outline-dark">Edit</a></td>    
+            {% if post.post_id == g.id %}
+            <td><a href="/edit_post/{{ post.post_id }}" class="func btn btn-outline-dark">Edit</a></td>
+            {% endif %}
           </tr>
           {% endif %}
           {% endfor %}

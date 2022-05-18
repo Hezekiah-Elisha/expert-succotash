@@ -135,6 +135,9 @@ main{
   text-align: center;
   max-height: 300px;
 }
+.post section img{
+  width: 100%;
+}
 
 
 .card{

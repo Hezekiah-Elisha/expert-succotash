@@ -58,6 +58,7 @@ def login():
             if check_password_hash(pwd, request.form['password']):
                 session['username'] = request.form['username']
                 session['role'] = role(request.form['username'])
+                session['id'] = get_userid(request.form['username'])
                 return redirect(url_for('html_lookup'))
             else:
                 print('*******************Here*****************')
@@ -70,18 +71,24 @@ def login():
 
 @app.route('/getsession')
 def getsession():
-    if 'username' and 'role' in session:
-        # lala = (session['username'], )
-        return f"{g.username} : {g.role}"
+    if 'username' and 'role' and 'id' in session:
+        return f"{g.username} : {g.role} : {g.id}"
     return redirect(url_for('login'))
 
 @app.before_request
 def before_request():
     g.username = None
     g.role = None
+    g.id = None
     if 'username' in session:
         g.username = session['username']
         g.role = session['role']
+        g.id = session['id']
+
+
+# @app.errorhandler(404)
+# def error():
+#     render_template('404.html')
     
 
 
@@ -123,11 +130,22 @@ def registered_list():
     if request.method == 'GET':
         users = all_users()
         return render_template('admin/registered.html', users=users)
-    else:
+    # else:
+    #     role = request.form['role']
+    #     # name = find_author(id)
+    #     change_it = switcher_role(name, role)
+    #     return redirect(url_for('registered_list'))
+    
+app.route('/change_role/<name>')
+def change_role(name):
+    if request.method == 'POST':
+        if 'username' not in session:
+            return redirect(url_for('login'))
         role = request.form['role']
-        message = switcher_role(g.username, role)
-        users = all_users()
-        return render_template('admin/registered.html', message=message, users=users)
+        change_it = switcher_role(name, role)
+        return redirect(url_for('registered_list'))
+    else:
+        return "fuck"
 
 
 @app.route('/delete/<id>')
@@ -199,7 +217,7 @@ def editting(id):
     if 'username' in session:
         if request.method == 'GET':
             post = get_post(id)
-            request.form['title'] = post.title
+            post.title = request.form['title']
             return render_template('admin/edit_post.html')#, post=post)
         else:
             pass

@@ -60,7 +60,7 @@ def get_userid(username):
         return(user.user_id)
     else:
         return None
-    
+
 
 def manage_author_posts(username):
     user = session.query(User).filter(User.username==username).first()
