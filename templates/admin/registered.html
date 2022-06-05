@@ -33,18 +33,16 @@
           <td>{{ user.user_id }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
-          <td>{# user.role #}
-            <form action="/change_role/{{user.username}}" method="POST">
-            <div class="mb-3">
-              <label for="role" class="col-form-label">Role:</label>
-              <select class="selects" name="role" required>
-                <option value="" selected>{{ user.role }}</option>
-                <option value="super_user">Super User</option>
-                <option value="Admin">Admin</option>
-                <option value="Author">Author</option>
-              </select>
-              <a href="submit" class="btn btn-success">Save</a>
-              <!-- </form> -->
+          <td>{{ user.role }}
+            {% if g.role == 'super_user' %}
+            {% if user.role == 'super_user'%}
+            <a href="url_for('change_role', name=user.username, role='super_user')" class="btn btn-dark text-danger">super_user</a>
+            {% endif %}
+            {% if g.role == 'super_user' or g.role == 'Admin' %}
+            <a href="url_for('change_role', name=user.username, role='Admin')" class="btn btn-dark text-info">Admin</a>
+            <a href="url_for('change_role', name=user.username, role='Author')" class="btn btn-dark text-warning">Author</a>
+            {% endif %}
+            {% endif %}
           </td>
           {% if g.role == 'super_user' %}
           <td><a href="{{ url_for('deleted_user', id=user.user_id) }}" class="func btn btn-danger">Delete</button></td>

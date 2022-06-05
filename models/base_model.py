@@ -53,7 +53,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     users = relationship("User", back_populates="posts")
     post_topics = relationship("PostTopic", cascade="all, delete-orphan", backref="posts_pt")
-    # topics_pt = relationship("Post", cascade="all, delete-orphan", backref="PostTopics")
+    topics_pt = relationship("Post", cascade="all, delete-orphan", backref="PostTopics")
 
 
 class Topic(Base):
@@ -67,7 +67,7 @@ class Topic(Base):
     slug = Column(String(255), nullable=False)
 
     PostTopics = relationship("PostTopic", cascade="all, delete-orphan", backref="topics_pt")
-    # posts_pt = relationship("Topic", cascade="all, delete-orphan", backref="post_topics")
+    posts_pt = relationship("Topic", cascade="all, delete-orphan", backref="post_topics")
 
 
 class PostTopic(Base):
@@ -76,16 +76,16 @@ class PostTopic(Base):
     """
     __tablename__="post_topic"
     post_topic_id = Column(Integer, nullable=False, primary_key=True)
-    post_id = Column(Integer, ForeignKey("posts.post_id"))
-    topic_id = Column(Integer, ForeignKey("topics.topic_id"))
+    post_id = Column(Integer, ForeignKey("posts.post_id"), unique=True)
+    topic_id = Column(Integer, ForeignKey("topics.topic_id"), unique=True)
 
 
 def connect_db():
     db = create_engine(f"mysql+mysqldb://{'root'}:{'root'}@localhost/{'this_blog'}", pool_pre_ping=True, echo=True)
     return db
 
-engine = connect_db()
-User.__table__.create(bind=engine, checkfirst=True)
-Post.__table__.create(bind=engine, checkfirst=True)
-Topic.__table__.create(bind=engine, checkfirst=True)
-PostTopic.__table__.create(bind=engine, checkfirst=True)
+# engine = connect_db()
+# User.__table__.create(bind=engine, checkfirst=True)
+# Post.__table__.create(bind=engine, checkfirst=True)
+# Topic.__table__.create(bind=engine, checkfirst=True)
+# PostTopic.__table__.create(bind=engine, checkfirst=True)

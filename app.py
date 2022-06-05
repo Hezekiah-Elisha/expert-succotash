@@ -37,6 +37,12 @@ def create_db():
     g.session_db = Session()
 
 
+@app.errorhandler(404)
+def error(error):
+    name = "page"
+    return render_template('404.html', name=name), 404 
+
+
 @app.route('/', defaults={'page': 'home'})
 @app.route('/<page>')
 def html_lookup(page):
@@ -83,13 +89,7 @@ def before_request():
     if 'username' in session:
         g.username = session['username']
         g.role = session['role']
-        g.id = session['id']
-
-
-# @app.errorhandler(404)
-# def error():
-#     render_template('404.html')
-    
+        g.id = session['id']   
 
 
 @app.route('/register', methods=['POST','GET'])
@@ -131,17 +131,17 @@ def registered_list():
         users = all_users()
         return render_template('admin/registered.html', users=users)
     # else:
-    #     role = request.form['role']
+    #     # role = request.form['role']
     #     # name = find_author(id)
-    #     change_it = switcher_role(name, role)
-    #     return redirect(url_for('registered_list'))
+    #     # change_it = switcher_role(name, role)
+    #     return redirect(url_for('admin/registered_list'))
     
-app.route('/change_role/<name>')
-def change_role(name):
+app.route('/change_role/<name>/<role>')
+def change_role(name, role):
     if request.method == 'POST':
         if 'username' not in session:
             return redirect(url_for('login'))
-        role = request.form['role']
+        # role = request.form['role']
         change_it = switcher_role(name, role)
         return redirect(url_for('registered_list'))
     else:
