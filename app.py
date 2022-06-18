@@ -3,17 +3,24 @@ import os
 from datetime import datetime
 from flask import Flask, Blueprint, g, render_template, request, abort, session, url_for, redirect
 from jinja2 import TemplateNotFound
-from models.base_model import connect_db, User
+from models.base_model import User
 from routes.post import post_pages
 # from sqlalchemy import create_engine
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from models.model_functions import get_post, manage_author_posts, switcher_role, unapprove, approve, delete_post, signup_register, role, find_author, signin, get_userid, manage_all_posts, posts_available, all_users, delete_user, post_article
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 app = Flask(__name__)
-app.secret_key = 'plutofuture'
+app.secret_key = '68dfac8f4ac79a8532745e899de14428'
 app.register_blueprint(post_pages)
+
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    f"mysql+mysqldb://{'root'}:{'root'}@localhost/{'this_blog'}"
+
+db = SQLAlchemy(app)
 
 app.engine = connect_db()
 now = datetime.now()
@@ -33,8 +40,11 @@ def allowed_file(filename):
 @app.before_first_request
 def create_db():
     Session = sessionmaker(bind=app.engine)
-    g.session_db = None
-    g.session_db = Session()
+    # g.session_db = None
+    
+    # g.session_db = Session()
+    # db.create_all()
+    
 
 
 @app.errorhandler(404)

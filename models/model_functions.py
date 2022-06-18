@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 import sqlalchemy
-from models.base_model import User, connect_db, Post
-from flask import g, Flask
+from models.base_model import User, Post
+from flask import g, Flask, current_app
 from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
-app.engine = connect_db()
-Session = sessionmaker(bind=app.engine)
+# app.engine = connect_db()
+
+Session = sessionmaker(bind=app)
 session = Session()
 
 
