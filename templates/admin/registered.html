@@ -39,7 +39,7 @@
             <a href="url_for('change_role', name=user.username, role='super_user')" class="btn btn-dark text-danger">super_user</a>
             {% endif %}
             {% if g.role == 'super_user' or g.role == 'Admin' %}
-            <a href="/change_role/admin" class="btn btn-dark text-info">Admin</a>
+            <a href="/change_role/@{{ user.username }}-Admin" class="btn btn-dark text-info">Admin</a>
             <a href="{# url_for('change_role', name=user.username, role='Author') #}" class="btn btn-dark text-warning">Author</a>
             {% endif %}
             {% endif %}

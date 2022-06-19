@@ -135,19 +135,6 @@ def signup():
     message = 'Please sign up'
     return render_template('register.html', message=message, form=form)
 
-    # if request.method == 'GET':
-    #     message = 'Please sign up'
-    #     return render_template("register.html", message=message)
-    # else:
-    #     username = request.form['username']
-    #     first_name = request.form['fname']
-    #     last_name = request.form['lname']
-    #     gender = request.form['gender']
-    #     email = request.form['email']
-    #     password = request.form['pword']
-    #     message = signup_register(username, first_name, last_name, gender, email, generate_password_hash(password))
-    #     return render_template('register.html', message=message)
-
 
 @app.route('/logout')
 def logout():
@@ -192,12 +179,12 @@ def add_topic():
         # return render_template('admin/add_topic.html', message=message)
         return redirect(url_for('dashboard'))
     
-app.route('/change_role/<role>')
-def change_role(role):
+app.route('/change_role/<text:user>/<text:role>')
+def change_role(username, role):
     if 'username' not in session:
         return redirect(url_for('login'))
         # role = request.form['role']
-    switcher_role(g.username, role)
+    switch = switcher_role(username, role)
     return redirect(url_for('registered_list'))
     # else:
     #     return redirect(url_for('error'))
