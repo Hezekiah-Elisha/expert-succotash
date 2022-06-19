@@ -7,20 +7,29 @@
       <form class="" action="/register" method="POST">
         <label for=""><h2>{{ message }}</h2></label>
         <label for=""><h3>Register here</h3></label>
-        <input type="text" name="username" value="" placeholder="username" required>
-        <input type="text" name="fname" value="" placeholder="First Name" required>
-        <input type="text" name="lname" value="" placeholder="Last Name" required>
-        <input type="email" name="email" value="" placeholder="email" required>
-        <select class="selects" name="gender" required>
+        {{ form.csrf_token}}
+        {{ form.username(placeholder="username") }}
+        <!-- <input type="text" name="username" value="" placeholder="username" required> -->
+        {{ form.firstName(placeholder="First Name") }}
+        <!-- <input type="text" name="fname" value="" placeholder="First Name" required> -->
+        {{ form.lastName(placeholder="Last Name") }}
+        <!-- <input type="text" name="lname" value="" placeholder="Last Name" required> -->
+        {{ form.email(placeholder="Email") }}
+        <!-- <input type="email" name="email" value="" placeholder="email" required> -->
+        {{ form.gender(class="selects") }}
+        <!-- <select class="selects" name="gender" required>
           <option value="" selected>Gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Prefer not to say</option>
-        </select>
+        </select> -->
         <!-- <input type="date" name="" value="" min="2022-01-01" max="2025-12-31" required> -->
-        <input type="password" name="pword" value="" placeholder="password" required>
-        <input type="password" name="" value="" placeholder="confirm password">
-        <button type="submit" class="btn" name="button">Register</button>
+        {{ form.password(placeholder="Password") }}
+        <!-- <input type="password" name="pword" value="" placeholder="password" required> -->
+        {{ form.password_confirmation(placeholder="Confirm Password") }}
+        <!-- <input type="password" name="" value="" placeholder="confirm password"> -->
+        {{ form.submit(class="btn btn-success") }}
+        <!-- <button type="submit" class="btn" name="button">Register</button> -->
       </form>
       <p>Already have an account? <a href="/login">Login</a></p>
     </article>

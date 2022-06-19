@@ -13,12 +13,16 @@ session = Session()
 
 def signup_register(username, first_name, last_name, gender, email, password, role='Author'):
     try:
-        user = User(username=username, first_name=first_name, last_name=last_name, gender=gender,\
-            email=email, password=password, role=role)
-        # print(session)
-        session.add(user)
-        session.commit()
-        return('Kindly proceeed to the log in page. Thank You!')
+        user = session.query(User).filter(User.username==username).first()
+        if user is None:
+            user = User(username=username, first_name=first_name, last_name=last_name, gender=gender,\
+                email=email, password=password, role=role)
+            # print(session)
+            session.add(user)
+            session.commit()
+            return('Kindly proceeed to the log in page. Thank You!')
+        else:
+            return('User already exists')
     except:
         session.rollback()
         raise

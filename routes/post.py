@@ -15,7 +15,7 @@ def display_post(slugg):
         post_a_views=views(post_details.views)
 
     
-        return render_template("post.html", title=post_details.title, slug=post_details.slug, name = name.username, banner=post_details.banner,\
+        return render_template("post.html", title=post_details.title, slug=post_details.slug, first_name=name.first_name, last_name=name.last_name, banner=post_details.banner,\
             body=post_details.body, views=post_a_views, dop=post_details.dop)
     return render_template("404.html", name=name)
 

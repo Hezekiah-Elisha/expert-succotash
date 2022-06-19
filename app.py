@@ -14,6 +14,7 @@ from models.model_functions import get_post, manage_author_posts, switcher_role,
             post_article, addTopic, all_topics
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+from models.MyForms import LoginForm, RegisterForm
 
 
 app = Flask(__name__)
@@ -73,25 +74,26 @@ def html_lookup(page):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     if request.method == 'POST':
         session.pop('username', None)
-        areyouuser = request.form['username']
         
-        pwd = signin(areyouuser)
-        if pwd is not None:
-            if check_password_hash(pwd, request.form['password']):
-                session['username'] = request.form['username']
-                session['role'] = role(request.form['username'])
-                session['id'] = get_userid(request.form['username'])
-                return redirect(url_for('html_lookup'))
+        if form.validate_on_submit():
+            areyouuser = form.username.data
+        
+            pwd = signin(areyouuser)
+            if pwd is not None:
+                if check_password_hash(pwd, form.password.data):
+                    session['username'] = areyouuser
+                    session['role'] = role(areyouuser)
+                    session['id'] = get_userid(areyouuser)
+                    return redirect(url_for('html_lookup'))
+                else:
+                    return render_template('login.html', message="Please enter the correct password or username")
+                    # raise
             else:
-                print('*******************Here*****************')
                 return render_template('login.html', message="Please enter the correct password or username")
-                # raise
-        else:
-            print('===========<There>================')
-            return render_template('login.html', message="Please enter the correct password or username")
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 @app.route('/getsession')
 def getsession():
@@ -112,18 +114,39 @@ def before_request():
 
 @app.route('/register', methods=['POST','GET'])
 def signup():
-    if request.method == 'GET':
-        message = 'Please sign up'
-        return render_template("register.html", message=message)
-    else:
-        username = request.form['username']
-        first_name = request.form['fname']
-        last_name = request.form['lname']
-        gender = request.form['gender']
-        email = request.form['email']
-        password = request.form['pword']
-        message = signup_register(username, first_name, last_name, gender, email, generate_password_hash(password))
-        return render_template('register.html', message=message)
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        username = form.username.data
+        first_name = form.firstName.data
+        last_name = form.lastName.data
+        email = form.email.data
+        gender = form.gender.data
+        password = form.password.data
+        password_confirmation = form.password_confirmation.data
+
+        if password==password_confirmation:
+            password_confirmed = password
+            message = signup_register(username.lower(), first_name.title(), last_name.title(), gender, email, generate_password_hash(password_confirmed))
+            return render_template('register.html', message=message, form=form)
+        else:
+            message = "Password and password confirmation do not match"
+            return render_template('register.html', form=form, message=message)
+    message = 'Please sign up'
+    return render_template('register.html', message=message, form=form)
+
+    # if request.method == 'GET':
+    #     message = 'Please sign up'
+    #     return render_template("register.html", message=message)
+    # else:
+    #     username = request.form['username']
+    #     first_name = request.form['fname']
+    #     last_name = request.form['lname']
+    #     gender = request.form['gender']
+    #     email = request.form['email']
+    #     password = request.form['pword']
+    #     message = signup_register(username, first_name, last_name, gender, email, generate_password_hash(password))
+    #     return render_template('register.html', message=message)
 
 
 @app.route('/logout')

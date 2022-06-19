@@ -3,6 +3,7 @@
 {% block main_container %}
 <main>
     <article class="container post">
+      <h1 class="">{{ title }}</h1>
       <section>
         <img class="img-fluid" src="../static/images/{{ banner }}" title="banner" alt="banner">
       </section>
@@ -10,7 +11,7 @@
         <h1 class="post_title">{{ title }}</h1>
         <div class="post_info">
           <div class="">
-            <span class="lnr lnr-tag"></span> {{ name }}
+            <span class="lnr lnr-tag"></span> {{ first_name }} {{ last_name }}
           </div>
           <div class="">
             <span class="lnr lnr-carlendar-full"></span> {{ dop }}
