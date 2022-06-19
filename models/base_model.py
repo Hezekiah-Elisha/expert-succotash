@@ -83,9 +83,9 @@ class User(Base):
     posts = relationship("Post", cascade="all, delete-orphan")#, backref="users")
 
 
-# def connect_db():
-    # db = create_engine(f"mysql+mysqldb://{'root'}:{'root'}@localhost/{'this_blog'}", pool_pre_ping=True, echo=True)
-    # return db
+def connect_db():
+    db = create_engine(f"mysql+mysqldb://{'root'}:{'root'}@localhost/{'this_blog'}", pool_pre_ping=True, echo=True)
+    return db
 
 # engine = connect_db()
 # User.__table__.create(bind=engine, checkfirst=True)

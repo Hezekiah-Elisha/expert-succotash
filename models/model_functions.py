@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 import sqlalchemy
-from models.base_model import User, Post
+from models.base_model import User, Post, Topic, connect_db
 from flask import g, Flask, current_app
 from sqlalchemy.orm import sessionmaker
 
-app = Flask(__name__)
-# app.engine = connect_db()
+# app = Flask(__name__)
+engine = connect_db()
 
-Session = sessionmaker(bind=app)
+Session = sessionmaker(bind=engine)
 session = Session()
 
 
@@ -158,3 +158,25 @@ def delete_post(id):
     session.delete(delete_post_here)
     session.commit()
     return "Deleted"
+
+def addTopic(topic, slug):
+    try:
+        topic_add = session.query(Topic).filter(Topic.name==topic).first()
+        if topic_add is None:
+            topic_add = Topic(name=topic, slug=slug)
+            session.add(topic_add)
+            session.commit()
+            return "Added"
+        else:
+            return "Already exists"
+    except:
+        session.rollback()
+        raise
+
+
+def all_topics():
+    try:
+        all_topics = session.query(Topic)
+        return all_topics
+    except:
+        raise

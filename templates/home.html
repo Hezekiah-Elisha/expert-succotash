@@ -15,7 +15,7 @@
     {% if post.approved == True %}
     <div class="myc1">
       <img src="static/images/{{post.banner}}" class="img-fluid" alt="">
-      <p>{{post.body[:20] | safe}}</p>
+      <p>{{post.title | safe}}</p>
       <a href="/post/{{ post.slug }}" class="btn btn-info">Read More</a>
     </div>
     {% endif %}
@@ -34,6 +34,7 @@
           <img src="../static/images/{{ post.banner }}" class="img-fluid" alt="">
         </div>
         <div class="blog-text">
+          <h4 class="home_h4">{{ post.title }}</h4>
           <p>{{ post.body[:300] | safe}}...</p>
           <a href="/post/{{ post.slug }}" class="btn btn-info">Read More</a>
         </div>

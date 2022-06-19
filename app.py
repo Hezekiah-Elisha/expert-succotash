@@ -3,12 +3,15 @@ import os
 from datetime import datetime
 from flask import Flask, Blueprint, g, render_template, request, abort, session, url_for, redirect
 from jinja2 import TemplateNotFound
-from models.base_model import User
+from models.base_model import User, connect_db, PostTopic, Post, Topic
 from routes.post import post_pages
-# from sqlalchemy import create_engine
+from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
-from models.model_functions import get_post, manage_author_posts, switcher_role, unapprove, approve, delete_post, signup_register, role, find_author, signin, get_userid, manage_all_posts, posts_available, all_users, delete_user, post_article
+from models.model_functions import get_post, manage_author_posts, switcher_role, \
+    unapprove, approve, delete_post, signup_register, role, find_author, signin, \
+        get_userid, manage_all_posts, posts_available, all_users, delete_user, \
+            post_article, addTopic, all_topics
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -23,6 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] =\
 db = SQLAlchemy(app)
 
 app.engine = connect_db()
+db.create_all()
 now = datetime.now()
 
 UPLOAD_FOLDER = 'static/images'
@@ -40,6 +44,10 @@ def allowed_file(filename):
 @app.before_first_request
 def create_db():
     Session = sessionmaker(bind=app.engine)
+    User.__table__.create(bind=app.engine, checkfirst=True)
+    Post.__table__.create(bind=app.engine, checkfirst=True)
+    Topic.__table__.create(bind=app.engine, checkfirst=True)
+    PostTopic.__table__.create(bind=app.engine, checkfirst=True)
     # g.session_db = None
     
     # g.session_db = Session()
@@ -145,17 +153,31 @@ def registered_list():
     #     # name = find_author(id)
     #     # change_it = switcher_role(name, role)
     #     return redirect(url_for('admin/registered_list'))
-    
-app.route('/change_role/<name>/<role>')
-def change_role(name, role):
-    if request.method == 'POST':
-        if 'username' not in session:
-            return redirect(url_for('login'))
-        # role = request.form['role']
-        change_it = switcher_role(name, role)
-        return redirect(url_for('registered_list'))
+
+
+@app.route('/add-topic', methods=['POST', 'GET'])
+def add_topic():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'GET':
+        all = all_topics()
+        return render_template('admin/add_topic.html', all=all)
     else:
-        return "fuck"
+        topic_name = request.form['topic_name']
+        slug = topic_name.lower().replace(' ', '-')
+        message = addTopic(topic_name, slug)
+        # return render_template('admin/add_topic.html', message=message)
+        return redirect(url_for('dashboard'))
+    
+app.route('/change_role/<role>')
+def change_role(role):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+        # role = request.form['role']
+    switcher_role(g.username, role)
+    return redirect(url_for('registered_list'))
+    # else:
+    #     return redirect(url_for('error'))
 
 
 @app.route('/delete/<id>')
