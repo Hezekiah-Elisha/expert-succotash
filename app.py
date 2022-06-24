@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 from datetime import datetime
-from flask import Flask, Blueprint, g, render_template, request, abort, session, url_for, redirect
+from flask import Flask, flash, Blueprint, g, render_template, request, abort, session, url_for, redirect
 from jinja2 import TemplateNotFound
 from models.base_model import User, connect_db, PostTopic, Post, Topic
 from routes.post import post_pages
@@ -11,10 +11,11 @@ from sqlalchemy.orm import sessionmaker
 from models.model_functions import get_post, manage_author_posts, switcher_role, \
     unapprove, approve, delete_post, signup_register, role, find_author, signin, \
         get_userid, manage_all_posts, posts_available, all_users, delete_user, \
-            post_article, addTopic, all_topics
+            post_article, addTopic, all_topics, deleteTopic
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from models.MyForms import LoginForm, RegisterForm
+from models.MyForms import LoginForm, RegisterForm, PostForm
+from flask_simple_captcha import CAPTCHA
 
 
 app = Flask(__name__)
@@ -29,6 +30,10 @@ db = SQLAlchemy(app)
 app.engine = connect_db()
 db.create_all()
 now = datetime.now()
+
+CAPTCHA_CONFIG = {'SECRET_CAPTCHA_KEY':'6fd916492b7931ca22034a3959a01f9e'}
+CAPTCHA = CAPTCHA(config=CAPTCHA_CONFIG)
+app = CAPTCHA.init_app(app)
 
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -78,22 +83,32 @@ def login():
     if request.method == 'POST':
         session.pop('username', None)
         
-        if form.validate_on_submit():
-            areyouuser = form.username.data
-        
-            pwd = signin(areyouuser)
-            if pwd is not None:
-                if check_password_hash(pwd, form.password.data):
-                    session['username'] = areyouuser
-                    session['role'] = role(areyouuser)
-                    session['id'] = get_userid(areyouuser)
-                    return redirect(url_for('html_lookup'))
-                else:
-                    return render_template('login.html', message="Please enter the correct password or username")
-                    # raise
+        if request.method == 'POST':
+            c_hash = request.form.get('captcha-hash')
+            c_text = request.form.get('captcha-text')
+            if CAPTCHA.verify(c_text, c_hash):
+                if form.validate_on_submit():
+                    areyouuser = form.username.data
+                
+                    pwd = signin(areyouuser)
+                    if pwd is not None:
+                        if check_password_hash(pwd, form.password.data):
+                            session['username'] = areyouuser
+                            session['role'] = role(areyouuser)
+                            session['id'] = get_userid(areyouuser)
+                            return redirect(url_for('html_lookup'))
+                        else:
+                            flash("Please enter the correct password or username")
+                            return render_template('error.html', form=form, captcha=CAPTCHA.create())
+                            # raise
+                    else:
+                        flash('Please enter the correct password or username')
+                        return render_template('error.html', form=form, captcha=CAPTCHA.create())
             else:
-                return render_template('login.html', message="Please enter the correct password or username")
-    return render_template('login.html', form=form)
+                flash('Failed captcha, please log in again!')
+                return render_template('error.html', form=form, captcha=CAPTCHA.create())
+    captcha = CAPTCHA.create()
+    return render_template('login.html', form=form, captcha=captcha)
 
 @app.route('/getsession')
 def getsession():
@@ -179,15 +194,13 @@ def add_topic():
         # return render_template('admin/add_topic.html', message=message)
         return redirect(url_for('dashboard'))
     
-app.route('/change_role/<text:user>/<text:role>')
+app.route('/change_role/<username>_<role>')
 def change_role(username, role):
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    # if 'username' not in session:
+        # return redirect(url_for('login'))
         # role = request.form['role']
-    switch = switcher_role(username, role)
+    # switch = switcher_role(username, role)
     return redirect(url_for('registered_list'))
-    # else:
-    #     return redirect(url_for('error'))
 
 
 @app.route('/delete/<id>')
@@ -195,35 +208,69 @@ def deleted_user(id):
     delete = delete_user(id)
     return redirect(url_for('registered_list'))
 
+@app.route('/delete_topic/<id>')
+def delete_topic(id):
+    deleteTopic(id)
+    return redirect(url_for('add_topic'))
+
 
 @app.route('/create_post', methods=['POST', 'GET'])
 def create_post():
-    if request.method == 'GET':
-        if 'username' in session:
-            return render_template("admin/create_post.html", message="This is a get method", user=g.username)
-        else:
-            return redirect(url_for('login'))
-    else:
+    if 'username' in session:
+        form = PostForm()
+        form.topic.choices = [(f.topic_id, f.name) for f in all_topics() ]
 
-        if 'username' in session:
-            title = request.form['title']
-            body = request.form['body']
-            topic = request.form['topic']
-            banner = request.files['file']
+        if (request.method == 'POST'):
+            if form.validate_on_submit():
+                title = form.title.data
+                banner = form.banner.data
+                body = form.body.data
+                topic = form.topic.data
 
-        if banner.filename == '':
-            return redirect(request.url)
-        if banner and allowed_file(banner.filename):
-            filename = secure_filename(banner.filename)
-            banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # banner.save(f'/static/images/{filename}')
-            # return redirect(url_for('uploaded_file', filename=filename))
+                if banner.filename == '':
+                    return redirect(request.url)
+                    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+                if banner and allowed_file(banner.filename):
+                    filename = secure_filename(banner.filename)
+                    banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    # banner.save(f'/static/images/{filename}')
+                    # return redirect(url_for('uploaded_file', filename=filename))
 
-            user_id = get_userid(g.username)
-            message = post_article(title, filename, body, topic, user_id)
-            return render_template('admin/index.html', message=message)
-        else:
-            return redirect(url_for('login'))
+                    user_id = get_userid(g.username)
+                    message = post_article(title, filename, body, topic, user_id)
+                    return '==============================='
+                    return redirect('admin/index.html')
+                return "something happened"
+        return render_template('admin/create_post.html', user=g.username, form=form)
+    
+    return redirect(url_for('login'))
+
+    # if request.method == 'GET':
+    #     if 'username' in session:
+    #         return render_template("admin/create_post.html", message="This is a get method", user=g.username)
+    #     else:
+    #         return redirect(url_for('login'))
+    # else:
+
+    #     if 'username' in session:
+    #         title = request.form['title']
+    #         body = request.form['body']
+    #         topic = request.form['topic']
+    #         banner = request.files['file']
+
+    #     if banner.filename == '':
+    #         return redirect(request.url)
+    #     if banner and allowed_file(banner.filename):
+    #         filename = secure_filename(banner.filename)
+    #         banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #         # banner.save(f'/static/images/{filename}')
+    #         # return redirect(url_for('uploaded_file', filename=filename))
+
+    #         user_id = get_userid(g.username)
+    #         message = post_article(title, filename, body, topic, user_id)
+    #         return render_template('admin/index.html', message=message)
+    #     else:
+    #         return redirect(url_for('login'))
     
 @app.route('/manage_posts')
 def manage_posts():

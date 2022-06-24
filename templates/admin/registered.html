@@ -36,11 +36,11 @@
           <td>{{ user.role }}
             {% if g.role == 'super_user' %}
             {% if user.role == 'super_user'%}
-            <a href="url_for('change_role', name=user.username, role='super_user')" class="btn btn-dark text-danger">super_user</a>
+            <a href="{# url_for('change_role', username=user.username, role='super_user') #}" class="btn btn-dark text-danger">super_user</a>
             {% endif %}
             {% if g.role == 'super_user' or g.role == 'Admin' %}
-            <a href="/change_role/@{{ user.username }}-Admin" class="btn btn-dark text-info">Admin</a>
-            <a href="{# url_for('change_role', name=user.username, role='Author') #}" class="btn btn-dark text-warning">Author</a>
+            <a href="{# url_for('change_role', username=user.username, role='Admin') #}" class="btn btn-dark text-info">Admin</a>
+            <a href="{# url_for('change_role', username=user.username, role='Author') #}" class="btn btn-dark text-warning">Author</a>
             {% endif %}
             {% endif %}
           </td>

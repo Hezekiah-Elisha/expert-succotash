@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, PasswordField, SelectField
+from wtforms import StringField, TextAreaField, SubmitField, PasswordField, \
+    SelectField, FileField
 from wtforms.validators import DataRequired, Email
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[DataRequired()], render_kw={"placeholder": "Username"})
@@ -17,4 +19,12 @@ class RegisterForm(FlaskForm):
     gender = SelectField(u'gender', choices=[('male', 'man'), ('female', 'woman'), ('prefer not to say', 'None')])
     password = PasswordField('password', validators=[DataRequired()])
     password_confirmation = PasswordField('password1', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+
+class PostForm(FlaskForm):
+    title = StringField('title', validators=[DataRequired()])
+    banner = FileField('banner', validators=[FileRequired()])
+    body = StringField('body', validators=[DataRequired()])
+    topic = SelectField(u'topic', coerce=int)
     submit = SubmitField('submit')

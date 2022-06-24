@@ -77,7 +77,11 @@
 
     {% block main %}
       {% block slide %}{% endblock slide %}
-      {% block main_container %}{% endblock main_container %}
+      {% block main_container %}
+        {% block error_m %}
+
+        {% endblock error_m %}
+      {% endblock main_container %}
     {% endblock main %}
 
     {% block footer %}

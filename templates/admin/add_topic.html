@@ -39,19 +39,25 @@
         {{ message }}
         <div>
             <h3 class="dash-welcome">Available topics</h3>
-            <table class="table">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>slug</th>
-                </tr>
-                {% for one in all %}
-                <tr>
-                    <td>{{ one.topic_id }}</td>
-                    <td>{{ one.name }}</td>
-                    <td>{{ one.slug }}</td>
-                </tr>
-                {% endfor %}
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>slug</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for one in all %}
+                    <tr>
+                        <td>{{ one.topic_id }}</td>
+                        <td>{{ one.name }}</td>
+                        <td>{{ one.slug }}</td>
+                        <td><a href="{{ url_for('delete_topic', id=one.topic_id) }}" class="btn btn-danger text-light">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
     </article>

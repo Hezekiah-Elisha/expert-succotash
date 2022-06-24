@@ -184,3 +184,9 @@ def all_topics():
         return all_topics
     except:
         raise
+
+def deleteTopic(id):
+    delete_topic_here = session.query(Topic).get(id)
+    session.delete(delete_topic_here)
+    session.commit()
+    return "Topic deleted"
