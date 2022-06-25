@@ -38,7 +38,7 @@ app = CAPTCHA.init_app(app)
 UPLOAD_FOLDER = 'static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 # g.session_db = []
 
@@ -214,10 +214,10 @@ def change_role(username, role):
     return redirect(url_for('registered_list'))
 
 
-@app.route('/allow/<username>')
+@app.route('/allow-<username>')
 def allow_a_member(username):
     changed = allowing_a_member(username)
-    return changed
+    return 'weweweweweewewe'
 
 
 

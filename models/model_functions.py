@@ -53,8 +53,9 @@ def allowed_member(username):
 
 def allowing_a_member(username):
     try:
-        user = session.query(User).filter(User.username==username).update({'allowed':1}, synchronize_session="fetch")
-        return 'trues'
+        user = session.query(User).filter(User.username==username).update({User.allowed: 1}, synchronize_session="fetch")
+        session.commit()
+        return 1
     except:
         session.rollback()
         raise
