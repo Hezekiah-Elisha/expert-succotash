@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sqlalchemy
-from models.base_model import User, Post, Topic, connect_db
+from models.base_model import User, Post, Topic, connect_db, Opportunity, Contact
 from flask import g, Flask, current_app
 from sqlalchemy.orm import sessionmaker
 
@@ -121,9 +121,9 @@ def delete_user(id):
     return "Deleted"
 
 
-def post_article(title, banner, body, topic, user_id, credit='wewe', approved=0,  views=0):
+def post_article(title, banner, body, topic, user_id, credit='Credits', approved=0,  views=0):
     try:
-        slug = title.replace(' ', '_')
+        slug = title.replace(' ', '-')
         post = Post(title=title, slug=slug, banner=banner, credit=credit, body=body, topic=topic, user_id=user_id, approved=approved, views=views)
         session.add(post)
         session.commit()
@@ -212,3 +212,24 @@ def deleteTopic(id):
     session.delete(delete_topic_here)
     session.commit()
     return "Topic deleted"
+
+
+def post_opportunity(title, topic, description, link, expiry_date, user_id):
+    try:
+        post = Opportunity(title=title, topic=topic, description=description, link=link, expiry_date=expiry_date, user_id=user_id)
+        session.add(post)
+        session.commit()
+        return "added"
+    except:
+        session.rollback()
+        raise
+
+
+def post_contact(name, email, feedback):
+    try:
+        contact = Contact(name, email, feedack)
+        session.add(contact)
+        session.commit()
+    except:
+        session.rollback()
+        raise

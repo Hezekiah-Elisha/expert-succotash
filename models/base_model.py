@@ -65,6 +65,36 @@ class Topic(Base):
     # posts_pt = relationship("Topic", cascade="all, delete-orphan", backref="post_topics")
 
 
+class Opportunity(Base):
+    """
+    Class oppportunity: Instance of Base
+    """
+    __tablename__="opportunities"
+    opportunity_id = Column(Integer, nullable=False, primary_key=True)
+    title = Column(String(50), nullable=False)
+    topic = Column(String(50), nullable=False)
+    description = Column(LONGTEXT, nullable=False)
+    link = Column(LONGTEXT, nullable=False)
+    posting_date = Column(DateTime, default=datetime.now, nullable=False)
+    # expiry_date = Column(DateTime(), nullable=False)
+
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    
+    users = relationship('User') 
+
+
+class Contact(Base):
+    """
+    Class Contact; Instance of Base
+    """
+    __tablename__="contacts"
+    contact_id = Column(Integer, nullable=False, primary_key=True)
+    name = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False)
+    feedback = Column(LONGTEXT, nullable=False)
+    sent_datetime = datetime.now()
+
+
 class User(Base):
     """
     Class User; instance of Base
@@ -83,6 +113,7 @@ class User(Base):
     role = Column(String(10), unique=False, nullable=False)
 
     posts = relationship("Post", cascade="all, delete-orphan")#, backref="users")
+    opps = relationship('Opportunity')
 
 
 def connect_db():

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, PasswordField, \
-    SelectField, FileField
+    SelectField, FileField, DateTimeField
 from wtforms.validators import DataRequired, Email
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
@@ -28,4 +28,19 @@ class PostForm(FlaskForm):
     body = StringField('body', validators=[DataRequired()])
     credit = StringField('credit', validators=[DataRequired()])
     topic = SelectField(u'topic', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+
+class ContactForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
+    feedback = TextAreaField('feedback', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
+class OppForm(FlaskForm):
+    title = StringField('title', validators=[DataRequired()])
+    topic = StringField('topic', validators=[DataRequired()])
+    description = TextAreaField('description', validators=[DataRequired()])
+    link = StringField('link', validators=[DataRequired()])
+    expiry_date = DateTimeField('date', validators=[DataRequired()])
     submit = SubmitField('submit')

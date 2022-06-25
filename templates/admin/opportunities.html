@@ -1,0 +1,21 @@
+{% extends 'admin/admin_structure.html' %}
+{% block dash_main %}
+<h2 class="text-center decorated_text part">Share any opportunity that you might have. Help bro!</h2>
+<main class="login-main">
+    <section>
+
+    </section>
+    <article>
+        <form action="/opportunities" method="POST">
+            {{ form.csrf_token }}
+            {{ form.title(placeholder="Title") }}
+            {{ form.topic(placeholder="Topic") }}
+            {{ form.description(placeholder='Briefly describe the opportunity', class="form-control") }}
+            {{ form.link(placeholder="Link to the opportunity") }}
+            {{ form.expiry_date(placeholder="Enter date") }}
+            {{ form.submit(class="btn btn-submit") }}
+        </form>
+        {{ message }}
+    </article>
+</main>
+{% endblock dash_main %}

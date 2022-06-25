@@ -12,12 +12,21 @@
     <h3 class="dash-welcome">Welcome to the Dashboard</h3>
     {{ message }}
     <article class="dash-tabs">
-      <a href="/registered" class="card"><h4>Registered users</h4></a>
-      <a href="/manage_posts" class="card"><h4>Manage posts</h4></a>
-      <a href="/published" class="card"><h4>Published</h4></a>
-      {% if g.role == 'super_user' %}
-      <a href="/add-topic" class="card"><h4>add topics</h4></a>
-      {% endif %}
+      <div>
+        <a href="/registered" class="card"><h4>Registered users</h4></a>
+        <a href="/manage_posts" class="card"><h4>Manage posts</h4></a>
+        <a href="/published" class="card"><h4>Published</h4></a>
+      </div>
+      <div>
+        {% if g.role == 'super_user' %}
+        <a href="/add-topic" class="card"><h4>add topics</h4></a>
+  
+        {% endif %}
+        {% if g.role == 'super_user' or g.role== 'Admin' %}
+        <a href="/opportunities" class="card"><h4>Add opportunities</h4></a>
+  
+        {% endif %}
+      </div>
     </article>
   </main>
 {% endblock dash_main %}

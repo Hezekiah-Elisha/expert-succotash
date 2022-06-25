@@ -84,7 +84,14 @@ nav{
   font-weight: bold;
   position: relative;
 }
-
+.part{
+  padding: 30px;
+}
+.decorated_text{
+  color: azure;
+  font-family: Amsterdam_Four !important;
+  font-weight: bold;
+}
 a{
   color: var(--brand-color) !important;
 }
@@ -137,6 +144,17 @@ main{
 }
 .post section img{
   width: 100%;
+}
+
+.op-list{
+  list-style: none;
+}
+.op-list li{
+  padding: 0;
+  margin: 0;
+}
+.op-list li a{
+  text-decoration: none;
 }
 
 

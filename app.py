@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from flask import Flask, flash, Blueprint, g, render_template, request, abort, session, url_for, redirect
 from jinja2 import TemplateNotFound
-from models.base_model import User, connect_db, PostTopic, Post, Topic
+from models.base_model import User, connect_db, PostTopic, Post, Topic, Contact, Opportunity
 from routes.post import post_pages
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
@@ -11,10 +11,11 @@ from sqlalchemy.orm import sessionmaker
 from models.model_functions import get_post, manage_author_posts, switcher_role, \
     unapprove, approve, delete_post, signup_register, role, find_author, signin, \
         get_userid, manage_all_posts, posts_available, all_users, delete_user, \
-            post_article, addTopic, all_topics, deleteTopic, allowed_member, allowing_a_member
+            post_article, addTopic, all_topics, deleteTopic, allowed_member, allowing_a_member, \
+                post_opportunity, post_contact
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from models.MyForms import LoginForm, RegisterForm, PostForm
+from models.MyForms import LoginForm, RegisterForm, PostForm, ContactForm, OppForm
 from flask_simple_captcha import CAPTCHA
 
 
@@ -54,6 +55,8 @@ def create_db():
     Post.__table__.create(bind=app.engine, checkfirst=True)
     Topic.__table__.create(bind=app.engine, checkfirst=True)
     PostTopic.__table__.create(bind=app.engine, checkfirst=True)
+    Contact.__table__.create(bind=app.engine, checkfirst=True)
+    Opportunity.__table__.create(bind=app.engine, checkfirst=True)
     # g.session_db = None
     
     # g.session_db = Session()
@@ -161,6 +164,32 @@ def posts():
     posts = posts_available()
     return render_template('posts.html', m=m, posts=posts)
 
+
+@app.route('/contact_us')
+def contact_us():
+    form =  ContactForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        feedback = form.feedback.data
+    return render_template('contact_us.html', form=form)
+
+
+@app.route('/opportunities', methods=['GET', 'POST'])
+def opportunity():
+    if 'username' in session:
+        form = OppForm()
+        if form.validate_on_submit():
+            title = form.title.data
+            topic = form.topic.data
+            description = form.description.data
+            expiry_date = form.expiry_date.data
+            link = form.link.data
+
+            message = post_opportunity(title, topic, description, link, expiry_date, g.id)
+            return render_template('admin/index.html', form=form, message=message)
+        return render_template('admin/opportunities.html', form=form)
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():

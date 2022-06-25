@@ -1,0 +1,19 @@
+{% extends 'structure.html' %}
+
+{% block main_container %}
+<h2 class="text-center decorated_text part">We would like to hear from you</h2>
+<main class="login-main">
+    <section>
+
+    </section>
+    <article>
+        <form action="/contact_us" method="POST">
+        {{ form.csrf_token }}
+        {{ form.name(placeholder="Please type in your name") }}
+        {{ form.email(placeholder='Type in your email') }}
+        {{ form.feedback(class="form-control", placeholder="Give us your Feedback") }}
+        {{ form.submit(class='btn btn-success') }}
+        </form>
+    </article>
+</main>
+{% endblock main_container %}

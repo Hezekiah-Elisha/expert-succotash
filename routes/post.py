@@ -5,7 +5,7 @@ post_pages = Blueprint("posts", __name__)
 
 @post_pages.get("/post/<slugg>")
 def display_post(slugg):
-    slugg = slugg.replace(' ', '_')
+    slugg = slugg.replace(' ', '-')
     post_details = post_by_slug(slugg)
     name = "Post"
     if post_details:
