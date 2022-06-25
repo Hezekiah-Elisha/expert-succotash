@@ -11,12 +11,12 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-def signup_register(username, first_name, last_name, gender, email, password, role='Author'):
+def signup_register(username, first_name, last_name, gender, email, password, role='Author', allowed=False):
     try:
         user = session.query(User).filter(User.username==username).first()
         if user is None:
             user = User(username=username, first_name=first_name, last_name=last_name, gender=gender,\
-                email=email, password=password, role=role)
+                email=email, allowed=allowed, password=password, role=role)
             # print(session)
             session.add(user)
             session.commit()
@@ -38,6 +38,27 @@ def signin(username):
             return None
     except:
         raise
+
+
+def allowed_member(username):
+    try:
+        user = session.query(User).filter(User.username==username).first()
+        if user is not None:
+            return(user.allowed)
+        else:
+            return None
+    except:
+        raise
+
+
+def allowing_a_member(username):
+    try:
+        user = session.query(User).filter(User.username==username).update({'allowed':1}, synchronize_session="fetch")
+        return 'trues'
+    except:
+        session.rollback()
+        raise
+
 
 def posts_available():
     posts = session.query(Post).limit(10)
@@ -99,10 +120,10 @@ def delete_user(id):
     return "Deleted"
 
 
-def post_article(title, banner, body, topic, user_id, approved=0,  views=0):
+def post_article(title, banner, body, topic, user_id, credit='wewe', approved=0,  views=0):
     try:
         slug = title.replace(' ', '_')
-        post = Post(title=title, slug=slug, banner=banner, body=body, topic=topic, user_id=user_id, approved=approved, views=views)
+        post = Post(title=title, slug=slug, banner=banner, credit=credit, body=body, topic=topic, user_id=user_id, approved=approved, views=views)
         session.add(post)
         session.commit()
         return "Posted succefully"

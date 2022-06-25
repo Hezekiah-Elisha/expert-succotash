@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from models.model_functions import get_post, manage_author_posts, switcher_role, \
     unapprove, approve, delete_post, signup_register, role, find_author, signin, \
         get_userid, manage_all_posts, posts_available, all_users, delete_user, \
-            post_article, addTopic, all_topics, deleteTopic
+            post_article, addTopic, all_topics, deleteTopic, allowed_member, allowing_a_member
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.MyForms import LoginForm, RegisterForm, PostForm
@@ -71,8 +71,9 @@ def error(error):
 @app.route('/<page>')
 def html_lookup(page):
     try:
+        m = all_topics()
         posts = posts_available()
-        return render_template('{}.html'.format(page), message="Welcome to this space", posts=posts, year=now.year)
+        return render_template('{}.html'.format(page), message="Welcome to this space", posts=posts, year=now.year, m=m)
     except TemplateNotFound:
         abort(404)
 
@@ -96,6 +97,7 @@ def login():
                             session['username'] = areyouuser
                             session['role'] = role(areyouuser)
                             session['id'] = get_userid(areyouuser)
+                            session['allowed'] = allowed_member(areyouuser)
                             return redirect(url_for('html_lookup'))
                         else:
                             flash("Please enter the correct password or username")
@@ -113,7 +115,7 @@ def login():
 @app.route('/getsession')
 def getsession():
     if 'username' and 'role' and 'id' in session:
-        return f"{g.username} : {g.role} : {g.id}"
+        return f"{g.username} : {g.role} : {g.id}: {g.allowed}"
     return redirect(url_for('login'))
 
 @app.before_request
@@ -121,10 +123,12 @@ def before_request():
     g.username = None
     g.role = None
     g.id = None
+    g.allowed = ""
     if 'username' in session:
         g.username = session['username']
         g.role = session['role']
-        g.id = session['id']   
+        g.id = session['id']
+        g.allowed = session['allowed']   
 
 
 @app.route('/register', methods=['POST','GET'])
@@ -151,6 +155,13 @@ def signup():
     return render_template('register.html', message=message, form=form)
 
 
+@app.route('/posts')
+def posts():
+    m = all_topics()
+    posts = posts_available()
+    return render_template('posts.html', m=m, posts=posts)
+
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -160,7 +171,7 @@ def logout():
 @app.route('/dashboard')
 def dashboard():
     if 'username' in session:
-        print(g.username)
+        print(g.username, g.allowed)
         return render_template('admin/index.html', user=g.username)
     else:
         return redirect(url_for('login'))
@@ -203,6 +214,13 @@ def change_role(username, role):
     return redirect(url_for('registered_list'))
 
 
+@app.route('/allow/<username>')
+def allow_a_member(username):
+    changed = allowing_a_member(username)
+    return changed
+
+
+
 @app.route('/delete/<id>')
 def deleted_user(id):
     delete = delete_user(id)
@@ -216,61 +234,34 @@ def delete_topic(id):
 
 @app.route('/create_post', methods=['POST', 'GET'])
 def create_post():
-    if 'username' in session:
-        form = PostForm()
-        form.topic.choices = [(f.topic_id, f.name) for f in all_topics() ]
+    if request.method == 'GET':
+        if 'username' in session:
+            m = all_topics()
+            return render_template("admin/create_post.html", message="This is a get method", user=g.username, m=m)
+        else:
+            return redirect(url_for('login'))
+    else:
 
-        if (request.method == 'POST'):
-            if form.validate_on_submit():
-                title = form.title.data
-                banner = form.banner.data
-                body = form.body.data
-                topic = form.topic.data
+        if 'username' in session:
+            title = request.form['title']
+            body = request.form['body']
+            topic = request.form['topic']
+            banner = request.files['file']
+            credit = request.form['credit']
 
-                if banner.filename == '':
-                    return redirect(request.url)
-                    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-                if banner and allowed_file(banner.filename):
-                    filename = secure_filename(banner.filename)
-                    banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    # banner.save(f'/static/images/{filename}')
-                    # return redirect(url_for('uploaded_file', filename=filename))
+        if banner.filename == '':
+            return redirect(request.url)
+        if banner and allowed_file(banner.filename):
+            filename = secure_filename(banner.filename)
+            banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # banner.save(f'/static/images/{filename}')
+            # return redirect(url_for('uploaded_file', filename=filename))
 
-                    user_id = get_userid(g.username)
-                    message = post_article(title, filename, body, topic, user_id)
-                    return '==============================='
-                    return redirect('admin/index.html')
-                return "something happened"
-        return render_template('admin/create_post.html', user=g.username, form=form)
-    
-    return redirect(url_for('login'))
-
-    # if request.method == 'GET':
-    #     if 'username' in session:
-    #         return render_template("admin/create_post.html", message="This is a get method", user=g.username)
-    #     else:
-    #         return redirect(url_for('login'))
-    # else:
-
-    #     if 'username' in session:
-    #         title = request.form['title']
-    #         body = request.form['body']
-    #         topic = request.form['topic']
-    #         banner = request.files['file']
-
-    #     if banner.filename == '':
-    #         return redirect(request.url)
-    #     if banner and allowed_file(banner.filename):
-    #         filename = secure_filename(banner.filename)
-    #         banner.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #         # banner.save(f'/static/images/{filename}')
-    #         # return redirect(url_for('uploaded_file', filename=filename))
-
-    #         user_id = get_userid(g.username)
-    #         message = post_article(title, filename, body, topic, user_id)
-    #         return render_template('admin/index.html', message=message)
-    #     else:
-    #         return redirect(url_for('login'))
+            user_id = get_userid(g.username)
+            message = post_article(title, filename, body, topic, user_id, credit)
+            return render_template('admin/index.html', message=message)
+        else:
+            return redirect(url_for('login'))
     
 @app.route('/manage_posts')
 def manage_posts():

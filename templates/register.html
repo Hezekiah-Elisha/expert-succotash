@@ -7,7 +7,7 @@
       <form class="" action="/register" method="POST">
         <label for=""><h2>{{ message }}</h2></label>
         <label for=""><h3>Register here</h3></label>
-        {{ form.csrf_token}}
+        {{ form.csrf_token }}
         {{ form.username(placeholder="username") }}
         <!-- <input type="text" name="username" value="" placeholder="username" required> -->
         {{ form.firstName(placeholder="First Name") }}

@@ -26,5 +26,6 @@ class PostForm(FlaskForm):
     title = StringField('title', validators=[DataRequired()])
     banner = FileField('banner', validators=[FileRequired()])
     body = StringField('body', validators=[DataRequired()])
-    topic = SelectField(u'topic', coerce=int)
+    credit = StringField('credit', validators=[DataRequired()])
+    topic = SelectField(u'topic', coerce=int, validators=[DataRequired()])
     submit = SubmitField('submit')

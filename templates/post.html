@@ -1,66 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="static/slick/slick.css" media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="static/slick/slick-theme.css" media="screen, projection"/>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/icons.css">
+    <meta name="theme-color" content="#058EAB">
+    <meta name="robots" content="index, follow">
+    <title>{{ title.title() }} || The Tech Archlight</title>
+    <meta name="description" content="{{ body[:150] | safe }}">
+    <meta name="keywords" content="{{ topic }}" >
+    <meta name="twitter:card" content="{{ body[:50] | safe }}" />
+    <meta name="twitter:site" content="https://thetecharchlight.com/{{ slug }}" />
+    <meta name="twitter:creator" content="{{ first_name }} {{ last_name }}" />
+    <meta name="og:title" content="{{ title.title() }}">
+    <meta name="og:url" content="https://thetecharchlight/{{ slug }}" >
+    <meta name="og:description" content="{{ body[:300] | safe }}">
+    <meta name="og:image" content="../static/images/{{ banner }}" >
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="THE TECH ARCHLIGHT" />
+</head>
+<body>
 {% extends "structure.html" %}
 
-{% block main_container %}
-<main>
-    <article class="container post">
-      <h1 class="">{{ title }}</h1>
-      <section class="">
-        <img class="img-fluid" src="../static/images/{{ banner }}" title="banner" alt="banner">
-      </section>
+  {% block main_container %}
+  <main>
+      <article class="container post">
+        <h1 class="dash-welcome">{{ title.upper() }}</h1>
+        <section class="">
+          <img class="img-fluid" src="../static/images/{{ banner }}" title="{{ banner }}" alt="{{ banner }}">
+          <p class="text-center"><i>{{ credit | safe }}</i></p>
+        </section>
+        <div class="">
+          <h1 class="post_title">{{ title }}</h1>
+          <div class="post_info">
+            <div class="">
+              <span class="lnr lnr-tag"></span> {{ first_name }} {{ last_name }}
+            </div>
+            <div class="">
+              <span class="lnr lnr-carlendar-full"></span> {{ dop }}
+            </div>
+            <div class="">
+              <span class="lnr lnr-pencil"></span> Topic: {{topic}}
+            </div>
+            <div class="">
+              <span class="lnr lnr-eye"></span>{{ views }} Views
+            </div>
+          </div>
+        </div>
+        <div class="content">
+          {{ body | safe }}
+        </div>
+      </article>
+      <aside class="">
+        <!-- <div class="card" style="width: 25rem;">
+          <div class="card-body">
+            <img class="img-fluid" src="../static/images/5.jpg" title="banner" alt="banner">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div> -->
+        <div class="card topics " style="width: 25rem; margin: auto;">
+          <h3 class="textcenter">Topics</h3>
+          <ul class="striped-list hover">
+            {% for topic in m %}
+            <li>{{ topic.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </aside>
+    </main>
+  {% endblock main_container %}
+
+    {% block main %}
+        {{ super() }}
+    {% endblock main %}
+
+    {% block footer %}
+    <footer>
       <div class="">
-        <h1 class="post_title">{{ title }}</h1>
-        <div class="post_info">
-          <div class="">
-            <span class="lnr lnr-tag"></span> {{ first_name }} {{ last_name }}
-          </div>
-          <div class="">
-            <span class="lnr lnr-carlendar-full"></span> {{ dop }}
-          </div>
-          <div class="">
-            <span class="lnr lnr-pencil"></span> comments
-          </div>
-          <div class="">
-            <span class="lnr lnr-eye"></span>{{ views }} Views
-          </div>
-        </div>
+        Join us: <a href="https://facebook.com">Facebook</a>, twitter
       </div>
-      <div class="content">
-        {{ body | safe }}
+      <div class="">
+        <span>&copy;</span> The The Tech Archlight
       </div>
-    </article>
-    <aside class="">
-      <div class="card" style="width: 25rem;">
-        <div class="card-body">
-          <img class="img-fluid" src="../static/images/5.jpg" title="banner" alt="banner">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-      <div class="card topics">
-        <h3>Topics</h3>
-        <ul class="striped-list">
-          <li>Topic 1</li>
-          <li>Topic 2</li>
-          <li>Topic 3</li>
-          <li>Topic 4</li>
-        </ul>
-      </div>
-    </aside>
-  </main>
-{% endblock main_container %}
-
-{% block main %}
-    {{ super() }}
-{% endblock main %}
-
-{% block footer %}
-<footer>
-  <div class="">
-    Join us: <a href="https://facebook.com">Facebook</a>, twitter
-  </div>
-  <div class="">
-    <span>&copy;</span> The The Tech Archlight
-  </div>
-</footer>
-{% endblock footer %}
+    </footer>
+    {% endblock footer %}
+    <script src="../static/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../static/js/jquery.min.js" charset="utf-8"></script>
+    <script src="../static/slick/slick.min.js" charset="utf-8"></script>
+    <script src="../static/js/script.js" charset="utf-8"></script>
+  </body>
+</html>

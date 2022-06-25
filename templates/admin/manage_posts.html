@@ -44,6 +44,8 @@
             <td><a href="{{ url_for('deleted_post', id=post.post_id) }}" name="button" class="func btn btn-danger">Delete</button></td>
             {% if post.post_id == g.id %}
             <td><a href="/edit_post/{{ post.post_id }}" class="func btn btn-outline-dark">Edit</a></td>
+            {% else %}
+            <td>Not Allowed</a></td>
             {% endif %}
           </tr>
           {% endif %}
@@ -83,6 +85,5 @@
   </main>
 {% endblock dash_main %}
 {% block editor %}
-  <script src="../../static/admin/js/ckeditor.js"></script>
   <script src="../../static/js/script.js"></script>
 {% endblock editor %}

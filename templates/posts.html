@@ -1,28 +1,4 @@
 {% extends "structure.html" %}
-{% block banner %}
-  <div class="back">
-    <p>The Tech Archlight...</p>
-  </div>
-{% endblock banner %}
-
-{% block header %}
-  {{ super() }}
-{% endblock header%}
-
-{% block slide %}
-  <section class="myc">
-    {% for post in posts %}
-    {% if post.approved == True %}
-    <div class="myc1">
-      <img src="static/images/{{post.banner}}" class="img-fluid" alt="">
-      <p>{{post.title | safe}}</p>
-      <a href="/post/{{ post.slug }}" class="btn btn-info">Read More</a>
-    </div>
-    {% endif %}
-    {% endfor %}
-  </section>
-{% endblock slide %}
-
 {% block main_container %}
 <main class="container">
   <div class="row">
@@ -96,18 +72,3 @@
   </div>
 </main>
 {% endblock main_container %}
-
-{% block main %}
-    {{ super() }}
-{% endblock main %}
-
-{% block footer %}
-<footer>
-  <div class="">
-    Join us: <a href="https://facebook.com">Facebook</a>, twitter
-  </div>
-  <div class="">
-    <span>&copy;</span> The The Tech Archlight {{ year }}
-  </div>
-</footer>
-{% endblock footer %}

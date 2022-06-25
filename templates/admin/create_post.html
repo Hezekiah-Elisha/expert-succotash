@@ -16,25 +16,27 @@
       {{ message }}
       <h3 class="dash-welcome">Post an article</h3>
       <form class="create-post" action="/create_post" method="POST" enctype="multipart/form-data">
-        {{ form.csrf_token }}
         <label for="title">Title</label>
-        {{ form.title }}
-        <!-- <input type="text" name="title" value=""> -->
+        <input type="text" name="title" value="" maxlength="60">
 
         <label for="banner">Banner</label>
-        {{ form.banner }}
-        <!-- <input type="file" name="file" value="" accept="image/jpg, image/jpeg, image/png"> -->
+        <input type="file" name="file" value="" accept=".jpg, .jpeg, .png, .webp" >
+
+        <label for="credit">Credits of banner</label>
+        <input type="text" name="credit" placeholder="Credit">
         
         <label for="body">Body</label>
-        {{ form.body(id='editor') }}
-        <!-- <textarea name="body" id="editor" rows="30" cols="80"></textarea> -->
+        <textarea name="body" id="editor" rows="30" cols="80"></textarea>
         
         <label for="topic">Topic</label>
-        {{ form.topic(class="form-control") }}
         <!-- <input type="text" name="topic" value=""> -->
-        <div id="sec-btn">
-          {{ form.submit(class='btn btn-outline-success text-light') }}
-          <!-- <button type="submit" class="btn btn-outline-success" name="button">Submit</button> -->
+        <select name="topic" id="" class="form-control">
+          {% for topic in m %}
+          <option value="{{topic.name}}">{{topic.name}}</option>
+          {% endfor %}
+        </select>
+        <div id="sec-btn" class="form-group">
+          <button type="submit" class="btn btn-outline-success" name="button">Submit</button>
         </div>
       </form>
     </article>
