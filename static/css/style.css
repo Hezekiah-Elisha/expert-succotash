@@ -87,6 +87,9 @@ nav{
 .part{
   padding: 30px;
 }
+.logo{
+  width: 100%;
+}
 .decorated_text{
   color: azure;
   font-family: Amsterdam_Four !important;
@@ -217,6 +220,8 @@ ul.striped-list > li {
 footer{
   background-color: var(--dark-accent);
   /* margin:0; */
+  display: flex;
+  justify-content: space-around;
 }
 footer .trade-mark{
   /* font-size: 34px; */

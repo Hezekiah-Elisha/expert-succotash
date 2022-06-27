@@ -76,7 +76,7 @@ class Opportunity(Base):
     description = Column(LONGTEXT, nullable=False)
     link = Column(LONGTEXT, nullable=False)
     posting_date = Column(DateTime, default=datetime.now, nullable=False)
-    # expiry_date = Column(DateTime(), nullable=False)
+    expiry_date = Column(DateTime(), nullable=False)
 
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     
