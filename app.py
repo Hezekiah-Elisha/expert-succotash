@@ -20,7 +20,7 @@ from flask_simple_captcha import CAPTCHA
 
 
 app = Flask(__name__)
-app.secret_key = '68dfac8f4ac79a8532745e899de14428'
+app.secret_key = '949f3d752b4f7b2758ee86be78e74daa'
 app.register_blueprint(post_pages)
 
 app.config['SQLALCHEMY_DATABASE_URI'] =\
